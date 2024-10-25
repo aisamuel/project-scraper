@@ -17,6 +17,6 @@ nginx.conf
 /env
 requirements2.txt
 .cache/*
-# logs/*
-# !logs/
+logs/*
+!logs/
 .DS_Store
