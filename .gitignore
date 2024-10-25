@@ -12,6 +12,7 @@ venv/*
 */env/*
 *.log
 */migrations/0*
+!**/migrations/__init__.py
 /venv
 nginx.conf
 /env
