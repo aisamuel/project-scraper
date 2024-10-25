@@ -21,6 +21,7 @@ PROXY_LIST = []
 @shared_task(bind=True, max_retries=3, default_retry_delay=300)
 def scrape_amazon_products(self):
     brand_name = os.getenv('BRAND_NAME', 'iPhone')
+    
     # ua = UserAgent()
     # # Set up headers to mimic a browser request
     headers = {
