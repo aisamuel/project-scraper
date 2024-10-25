@@ -1,16 +1,16 @@
-# Amazon Scrapper
+# Amazon Scraper
 
 # Introduction
 
-The goal of this project is to provide minimalist amazon brand scrapper application using Vue js and Django Rest Framework.
+The goal of this project is to provide minimalist amazon brand Scraper application using Vue js and Django Rest Framework.
 
-# Amazon Scrapper
+# Amazon Scraper
 
 # Getting Started
 
 First clone the repository from Github and switch to the new directory:
 
-    $ git clone https://github.com/aisamuel/project-scrapper.git
+    $ git clone https://github.com/aisamuel/project-Scraper.git
 
 
 
