@@ -3,8 +3,12 @@
 import os
 import sys
 
+import dotenv
 
 def main():
+
+    dotenv.read_dotenv(os.path.join(os.getcwd(), '.env'), override=True)
+    
     """Run administrative tasks."""
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'product_scraper.settings')
     try:
