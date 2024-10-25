@@ -18,7 +18,8 @@ nginx.conf
 /env
 requirements2.txt
 .cache/*
-logs/
+logs/*
+!logs/
 .DS_Store
 .env
 node_modules/

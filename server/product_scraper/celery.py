@@ -25,6 +25,6 @@ app.conf.beat_scheduler = 'django_celery_beat.schedulers:DatabaseScheduler'
 app.conf.beat_schedule = {
     'scrape_amazon_products_every_six_hours': {
         'task': 'scraper.tasks.scrape_amazon_products',
-        'schedule': crontab(minute=0, hour='*/6'),  # Every 6 hours
+        'schedule': crontab(minute="*"),  # Every 6 hours
     },
 }
