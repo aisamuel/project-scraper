@@ -4,6 +4,11 @@ from django.conf import settings
 from celery import Celery
 from celery.schedules import crontab
 
+import dotenv
+
+dotenv.read_dotenv(os.path.join(os.path.dirname(
+    os.path.dirname(__file__)), '.env'), override=True)
+    
 # Set the default Django settings module for the 'celery' program.
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'product_scraper.settings')
 
