@@ -154,7 +154,7 @@ LOGGING = {
         'file': {
             'level': 'INFO',
             'class': 'logging.FileHandler',
-            'filename': 'scraper.log',
+            'filename': 'logs/scraper.log',
         },
     },
     'loggers': {
