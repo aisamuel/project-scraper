@@ -41,6 +41,34 @@ You can now run the development server:
     $ python manage.py runserver
 
 
+Install Redis locally or use a cloud-based Redis service:
+   ```bash
+   # On Linux:
+   sudo apt-get install redis-server
+   
+   # On macOS:
+   brew install redis
+   ```
+
+In `settings.py`, set up Celery with Redis as the broker:
+   ```python
+   CELERY_BROKER_URL = 'redis://localhost:6379/0'
+   CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
+   ```
+
+
+Start a Celery worker to process tasks:
+   ```bash
+   celery -A product_scraper worker --loglevel=info
+   ```
+
+
+To enable periodic tasks, start Celery Beat in a separate terminal:
+   ```bash
+   celery -A product_scraper beat --loglevel=info
+   ```
+
+
 
 # Client Side
     $ cd client
