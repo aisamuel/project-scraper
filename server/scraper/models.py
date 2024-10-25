@@ -12,6 +12,9 @@ class Product(models.Model):
     sku = models.CharField(max_length=50)
     image = models.URLField(max_length=500)
     brand = models.ForeignKey(Brand, on_delete=models.CASCADE, related_name='products')
+
+    class Meta:
+        ordering = ['name']
     
     def __str__(self):
         return self.name
