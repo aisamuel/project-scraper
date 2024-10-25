@@ -14,11 +14,8 @@ venv/*
 */migrations/0*
 /venv
 nginx.conf
-comx.egg-info/
-comx-data/
 /env
 requirements2.txt
-envcomx/*
 .cache/*
 logs/
 .DS_Store
@@ -31,4 +28,3 @@ abcenv3.6/
 abcenv3.6.1/
 requirements_old.txt
 .env.local
-comx/settings/local_testing.py
