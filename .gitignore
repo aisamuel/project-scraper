@@ -21,12 +21,3 @@ requirements2.txt
 logs/*
 !logs/
 .DS_Store
-.env
-node_modules/
-abcenv/
-.abcenvlinx/
-abcenv3.6/
-.abcenvlinx3.6/
-abcenv3.6.1/
-requirements_old.txt
-.env.local
