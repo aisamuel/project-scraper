@@ -28,7 +28,7 @@ To get started, follow these steps to set up the project on your local machine.
    ```
 
 3. **Create .env file**:
-   Create a .env file in /server folder and copy the content of .env_sample file into it
+   Create a .env file in /server directory and copy the content of .env_sample file into it
 
    ```bash
 
