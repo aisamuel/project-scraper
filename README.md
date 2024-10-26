@@ -85,7 +85,16 @@ Celery is used for scheduling and managing background tasks, such as periodic sc
    celery -A product_scraper beat --loglevel=info
    ```
 
-### 3. Scheduling and Managing Periodic Tasks
+### 3. Client Side
+    $ cd client
+    
+Run the server;
+
+    $ python3 -m http.server 8020
+
+Go to http://localhost:8020/
+
+### 4. Scheduling and Managing Periodic Tasks
 
 Periodic tasks, such as scraping Amazon for product data, are scheduled using Celery Beat. The task configuration can be modified in Django’s `settings.py` or via the `celery.py` configuration file.
 
@@ -107,7 +116,7 @@ def setup_periodic_tasks(sender, **kwargs):
     )
 ```
 
-### 4. Web Scraping Implementation
+### 5. Web Scraping Implementation
 
 The scraping is implemented as a Celery task, which fetches product data from Amazon’s HTML structure. To handle Amazon’s anti-scraping mechanisms, the scraper includes the following measures:
 
@@ -142,7 +151,7 @@ def scrape_amazon_products(self, brand_name):
         raise self.retry(exc=e)
 ```
 
-### 5. Design Decisions
+### 6. Design Decisions
 
 The project assumes a reliable network and access to Redis and Celery for task scheduling. Here are some key design choices and assumptions made in this project:
 
@@ -159,6 +168,9 @@ The project assumes a reliable network and access to Redis and Celery for task s
 ---
 
 This documentation provides a foundational overview of setting up, running, and managing the backend, including web scraping, Celery setup, and task scheduling.
+
+
+
 
 
 
