@@ -15,7 +15,7 @@ logger = get_task_logger(__name__)
 
 # Constants
 CACHE_TIMEOUT = 6 * 3600  # Cache each page result for 6 hours
-CAPTCHA_IDENTIFIER = "captcha"
+CAPTCHA_IDENTIFIER = os.getenv('CAPTCHA_IDENTIFIER', 'captcha')
 PROXY_LIST = []
 
 @shared_task(bind=True, max_retries=3, default_retry_delay=300)
@@ -74,7 +74,7 @@ def scrape_amazon_products(self):
                 self.retry(exc=exc)
 
             except Exception as exc:
-                logger.error(f"An error occurred while scraping Amazon for {brand_name}, page {page}: {exc}")
+                logger.error(f"An error occurred while scraping for {brand_name}, page {page}: {exc}")
                 raise exc
 
         # Parse product data

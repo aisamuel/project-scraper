@@ -8,7 +8,6 @@ To get started, follow these steps to set up the project on your local machine.
 
 #### Requirements
 - Python 3.8 or higher
-- PostgreSQL (or other preferred database)
 - Redis (as the broker for Celery)
 - Django and Django REST Framework
 
@@ -50,7 +49,7 @@ Celery is used for scheduling and managing background tasks, such as periodic sc
 #### Steps
 
 1. **Install Redis**:
-   Install Redis locally or use a cloud-based Redis service:
+   Install Redis locally:
    ```bash
    # On Linux:
    sudo apt-get install redis-server
@@ -117,6 +116,7 @@ Here’s a simplified version of the scraping task:
 @shared_task(bind=True, max_retries=3)
 def scrape_amazon_products(self, brand_name):
     # Define the request parameters, user-agent rotation, and proxy settings
+    brand_name = os.getenv('BRAND_NAME', 'iPhone')
     url = f"https://www.amazon.com/s?k={brand_name}"
     headers = {"User-Agent": random.choice(USER_AGENTS)}
     proxies = {"http": random.choice(PROXIES)}
@@ -138,7 +138,7 @@ def scrape_amazon_products(self, brand_name):
 
 The project assumes a reliable network and access to Redis and Celery for task scheduling. Here are some key design choices and assumptions made in this project:
 
-1. **Data Source**: Amazon is the source for product data, and the scraper relies on specific HTML structures. This structure may change over time, so the scraper might need adjustments for compatibility.
+1. **Data Source**: Amazon is the source for product data, and the scraper relies on specific HTML structures.
 
 2. **Celery and Redis for Task Management**: Celery is used with Redis as the broker due to its reliability and ease of setup. Celery enables scalable task management, allowing future expansion if scraping needs grow.
 
