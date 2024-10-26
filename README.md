@@ -20,6 +20,8 @@ First clone the repository from Github and switch to the new directory:
 Activate the virtualenv for your project.
 
     $ source env/bin/activate  
+
+Create a .env file and copy the content of .env_sample file into it:
     
 Install project dependencies:
 

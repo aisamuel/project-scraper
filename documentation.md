@@ -27,17 +27,21 @@ To get started, follow these steps to set up the project on your local machine.
    pip install -r requirements.txt
    ```
 
-3. **Run Migrations**:
+3. **Create .env file**:
+   Create a .env file and copy the content of .env_sample file into it
+
+
+4. **Run Migrations**:
    ```bash
    python manage.py migrate
    ```
 
-4. **Create a Superuser**:
+5. **Create a Superuser**:
    ```bash
    python manage.py createsuperuser
    ```
 
-5. **Run the Development Server**:
+6. **Run the Development Server**:
    ```bash
    python manage.py runserver
    ```
@@ -155,6 +159,14 @@ This documentation provides a foundational overview of setting up, running, and 
 
 
 
+# Amazon Scraper
+
+# Introduction
+
+The goal of this project is to provide minimalist amazon brand Scraper application using Vue js and Django Rest Framework.
+
+# Amazon Scraper
+
 # Getting Started
 
 First clone the repository from Github and switch to the new directory:
@@ -169,6 +181,8 @@ First clone the repository from Github and switch to the new directory:
 Activate the virtualenv for your project.
 
     $ source env/bin/activate  
+
+Create a .env file and copy the content of .env_sample file into it:
     
 Install project dependencies:
 
