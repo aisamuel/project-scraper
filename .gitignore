@@ -13,8 +13,8 @@ venv/*
 !**/migrations/__init__.py
 /venv
 /env
-.cache/*
 logs/*.log
 !logs/
+.cache/*
 .env
 .DS_Store
