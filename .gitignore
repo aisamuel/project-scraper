@@ -1,6 +1,5 @@
 **/__pycache__/
 *.sqlite3
-dom.py
 .idea/*
 media/*
 *.pyc
@@ -13,9 +12,7 @@ venv/*
 **/migrations/*.py
 !**/migrations/__init__.py
 /venv
-nginx.conf
 /env
-requirements2.txt
 .cache/*
 logs/*
 !logs/
