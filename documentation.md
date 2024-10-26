@@ -1,6 +1,6 @@
 # Project Documentation
 
-This backend project is a Django application for scraping product data from Amazon and exposing it through a REST API. The application integrates **Celery** for task scheduling, periodic scraping jobs, and includes anti-scraping measures. The project is designed to efficiently fetch, cache, and serve data via the Django REST Framework (DRF).
+This Amazon product scraper backend project is a Django application for scraping product data from Amazon and exposing it through a REST API. The application integrates **Celery** for task scheduling, periodic scraping jobs, and includes anti-scraping measures. The project is designed to efficiently fetch, cache, and serve data via the Django REST Framework (DRF).
 
 ### 1. Project Setup and Running Locally
 
