@@ -142,7 +142,7 @@ def scrape_amazon_products(self, brand_name):
         raise self.retry(exc=e)
 ```
 
-### 5. Assumptions and Design Decisions
+### 5. Design Decisions
 
 The project assumes a reliable network and access to Redis and Celery for task scheduling. Here are some key design choices and assumptions made in this project:
 
