@@ -45,7 +45,11 @@ To get started, follow these steps to set up the project on your local machine.
    python manage.py createsuperuser
    ```
 
-6. **Run the Development Server**:
+6. **Run test**:
+
+    $ python manage.py test
+
+7. **Run the Development Server**:
    ```bash
    python manage.py runserver
    ```
@@ -86,6 +90,7 @@ Celery is used for scheduling and managing background tasks, such as periodic sc
    ```
 
 ### 3. Client Side
+Go to the client directory
     $ cd client
     
 Run the server;
