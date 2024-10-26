@@ -16,5 +16,5 @@ venv/*
 .cache/*
 logs/*
 !logs/
-.DS_Store
 .env
+.DS_Store
