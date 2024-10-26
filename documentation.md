@@ -239,3 +239,5 @@ To enable periodic tasks, start Celery Beat in a separate terminal:
 Run the server;
 
     $ python3 -m http.server 8020
+
+Go to http://localhost:8020/
