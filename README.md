@@ -30,6 +30,10 @@ To get started, follow these steps to set up the project on your local machine.
 3. **Create .env file**:
    Create a .env file in /server folder and copy the content of .env_sample file into it
 
+   ```bash
+
+   ```
+
 
 4. **Run Migrations**:
    ```bash
@@ -183,6 +187,8 @@ Activate the virtualenv for your project.
     $ source env/bin/activate  
 
 Create a .env file in /server folder and copy the content of .env_sample file into it.
+
+    $ 
     
 Install project dependencies:
 
