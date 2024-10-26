@@ -22,12 +22,19 @@ PROXY_LIST = []
 def scrape_amazon_products(self):
     brand_name = os.getenv('BRAND_NAME', 'iPhone')
     
-    # ua = UserAgent()
-    # # Set up headers to mimic a browser request
-    headers = {
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.102 Safari/537.36",
-        "Accept-Language": "en-US,en;q=0.5"
-    }
+    # # Set up headers
+    try:
+        ua = UserAgent()
+        headers = {
+            "User-Agent": ua.random,
+            "Accept-Language": "en-US,en;q=0.5"
+        }
+    except:
+        # If fake_useragent fails, use the fallback
+        headers = {
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.102 Safari/537.36",
+            "Accept-Language": "en-US,en;q=0.5"
+        }
 
     # Rotate proxy for each request
     if PROXY_LIST:
