@@ -46,8 +46,9 @@ To get started, follow these steps to set up the project on your local machine.
    ```
 
 6. **Run test**:
-
+    ```bash
     $ python manage.py test
+    ```
 
 7. **Run the Development Server**:
    ```bash
@@ -91,11 +92,15 @@ Celery is used for scheduling and managing background tasks, such as periodic sc
 
 ### 3. Client Side
 Go to the client directory
-    $ cd client
+```bash
+   $ cd client
+```
     
 Run the server;
 
+```bash
     $ python3 -m http.server 8020
+```
 
 Go to http://localhost:8020/
 
