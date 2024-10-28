@@ -37,6 +37,7 @@ To get started, follow these steps to set up the project on your local machine.
 
 4. **Run Migrations**:
    ```bash
+   python manage.py makemigrations  
    python manage.py migrate
    ```
 
