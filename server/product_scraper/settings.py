@@ -150,24 +150,40 @@ CELERY_TASK_SERIALIZER = 'json'
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '{levelname} {asctime} {module} {message}',
+            'style': '{',
+        },
+    },
     'handlers': {
         'file': {
             'level': 'INFO',
             'class': 'logging.FileHandler',
-            'filename': 'logs/scraper.log',
+            'filename': os.path.join(BASE_DIR, 'logs', 'scraper.log'),
+            'formatter': 'verbose',
+        },
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+            'formatter': 'verbose',
         },
     },
     'loggers': {
-        'scraper': {
-            'handlers': ['file'],
+        'django': {
+            'handlers': ['file', 'console'],
             'level': 'INFO',
             'propagate': True,
         },
         'celery': {
-            'handlers': ['file'],
+            'handlers': ['file', 'console'],
             'level': 'INFO',
-            'propagate': True,
+            'propagate': False,
+        },
+        'scraper': { 
+            'handlers': ['file', 'console'],
+            'level': 'DEBUG',
+            'propagate': False,
         },
     },
 }
-
