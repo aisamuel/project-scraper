@@ -41,11 +41,20 @@
     <div id="app">
       <h1>{{ appName }}</h1>
     
-      <input v-model="brandName" placeholder="Enter brand name" />
-      <input v-model="searchQuery" placeholder="Search by product name" /> <!-- Search input -->
+      <!-- Dropdown for Selecting a Brand -->
+      <label for="brand-select" class="dropdown-label">Select a Brand:</label>
+      <select id="brand-select" @change="updateBrand" class="styled-dropdown">
+        <option v-for="brand in brandsList" :key="brand.id" :value="brand.name">
+          {{ brand.name }}
+        </option>
+      </select>
+    
+      <!-- Search Input for Product Name -->
+      <input v-model="searchQuery" placeholder="Search by product name" />
       <button @click="fetchProducts(1)">Fetch Products</button>
     
-      <table>
+      <!-- Table of Products -->
+      <table v-if="productsList.length > 0">
         <thead>
           <tr>
             <th @click="sort('name')">Name</th>
@@ -63,6 +72,10 @@
           </tr>
         </tbody>
       </table>
+
+      <!-- Show "No Results Found" if productsList is empty -->
+      <p v-else class="no-results">No results found for this brand.</p>
+
     
       <div class="pagination">
         <button @click="fetchProducts(currentPage - 1)" :disabled="currentPage === 1">Previous</button>
@@ -70,7 +83,6 @@
         <button @click="fetchProducts(currentPage + 1)">Next</button>
       </div>
     </div>
-    
     
     
   </body>

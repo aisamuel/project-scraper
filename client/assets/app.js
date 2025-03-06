@@ -4,8 +4,10 @@ const app = Vue.createApp({
       appName: "Product Scraper",
       baseUrl: "http://127.0.0.1:8000",
       productUrl: "/api/products/",
-      brandName: "iPhone",
-      searchQuery: "",   // New property for the search term
+      brandUrl: "/api/brands/", 
+      selectedBrand: "",
+      brandsList: [], 
+      searchQuery: "",
       fields: ["name", "asin", "image", "brand"],
       currentSort: "name",
       currentSortDir: "asc",
@@ -15,44 +17,78 @@ const app = Vue.createApp({
     };
   },
   methods: {
-    // Sorting handler
+    // Fetch all brands from the API
+    async fetchBrands() {
+      console.log("Fetching brands...");
+
+      try {
+        const res = await fetch(`${this.baseUrl}${this.brandUrl}`);
+        if (!res.ok) throw new Error("Failed to fetch brands.");
+
+        const result = await res.json();
+        console.log("Brands received:", result);
+
+        this.brandsList = result.results;
+
+        if (this.brandsList.length > 0) {
+          this.selectedBrand = this.brandsList[0].name; 
+          console.log("Default brand selected:", this.selectedBrand);
+          this.fetchProducts(1);
+        }
+      } catch (error) {
+        console.error("Error fetching brands:", error);
+      }
+    },
+
+    async fetchProducts(page = 1) {
+      console.log(`fetchProducts() called with page: ${page}`);
+      console.log(`Selected Brand: ${this.selectedBrand}`);
+    
+      if (!this.selectedBrand) {
+        console.warn("fetchProducts() was called but no brand is selected.");
+        return;
+      }
+    
+      try {
+        const res = await fetch(
+          `${this.baseUrl}${this.productUrl}?brand__name=${encodeURIComponent(this.selectedBrand)}&page=${page}&page_size=${this.pageSize}&search=${this.searchQuery}`,
+          { mode: "cors" }
+        );
+    
+        if (res.ok) {
+          const result = await res.json();
+          console.log("Products received:", result);
+          this.productsList = result.results;
+          this.currentPage = page;
+        } else {
+          throw new Error("Failed to fetch products.");
+        }
+      } catch (error) {
+        console.error("Error fetching products:", error);
+      }
+    },
+
+
+    updateBrand(event) {
+      console.log(`New brand selected (before update): ${event.target.value}`);
+  
+      this.selectedBrand = event.target.value;
+  
+      this.$nextTick(() => {
+        console.log(`Updated selectedBrand: ${this.selectedBrand}, calling fetchProducts...`);
+        this.fetchProducts(1);
+      });
+    },
+
     sort(s) {
       if (s === this.currentSort) {
         this.currentSortDir = this.currentSortDir === "asc" ? "desc" : "asc";
       }
       this.currentSort = s;
     },
-
-    // Fetch products by brand and search query, with pagination
-    async fetchProducts(page = 1) {
-      if (!this.brandName) {
-        alert("Please enter a brand name.");
-        return;
-      }
-
-      try {
-        // Add search query to the API request parameters
-        const res = await fetch(
-          `${this.baseUrl}${this.productUrl}?brand__name=${this.brandName}&page=${page}&page_size=${this.pageSize}&search=${this.searchQuery}`,
-          { mode: "cors" }
-        );
-
-        if (res.ok) {
-          const result = await res.json();
-          this.productsList = result.results; // assuming paginated data in `results`
-          this.currentPage = page; // set current page
-        } else {
-          throw new Error("Failed to fetch products. Check your brand name and search term.");
-        }
-      } catch (error) {
-        console.error(error);
-        alert("Error fetching products: " + error.message);
-      }
-    },
   },
 
   computed: {
-    // Returns sorted list of products
     sortedProductsList() {
       return this.productsList.sort((a, b) => {
         let modifier = this.currentSortDir === "desc" ? -1 : 1;
@@ -63,10 +99,8 @@ const app = Vue.createApp({
     },
   },
 
-  mounted() {
-    // Fetch initial products only if `brandName` is already set
-    if (this.brandName) {
-      this.fetchProducts();
-    }
+  created() {
+    console.log("Vue app mounted! Fetching brands...");
+    this.fetchBrands();
   },
 });

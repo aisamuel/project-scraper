@@ -1,8 +1,14 @@
 from rest_framework import generics, filters
 from django_filters.rest_framework import DjangoFilterBackend
-from .models import Product
-from .serializers import ProductSerializer
+from .models import Product, Brand
+from .serializers import ProductSerializer, BrandSerializer
 from .pagination import CustomPageNumberPagination
+
+
+class BrandListView(generics.ListAPIView):
+    queryset = Brand.objects.all()
+    serializer_class = BrandSerializer
+    
 
 class ProductListView(generics.ListAPIView):
     queryset = Product.objects.all()
