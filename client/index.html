@@ -41,13 +41,18 @@
     <div id="app">
       <h1>{{ appName }}</h1>
     
-      <!-- Dropdown for Selecting a Brand -->
-      <label for="brand-select" class="dropdown-label">Select a Brand:</label>
-      <select id="brand-select" @change="updateBrand" class="styled-dropdown">
+      <!-- Brand Selection Dropdown -->
+      <label for="brand-select">Select a Brand:</label>
+      <select id="brand-select" v-model="selectedBrand" @change="updateBrand" class="styled-dropdown">
+        <!-- "All Brands" Option -->
+        <option value="ALL">ALL</option>
+
+        <!-- Loop Through Available Brands -->
         <option v-for="brand in brandsList" :key="brand.id" :value="brand.name">
           {{ brand.name }}
         </option>
       </select>
+
     
       <!-- Search Input for Product Name -->
       <input v-model="searchQuery" placeholder="Search by product name" />
@@ -59,7 +64,7 @@
           <tr>
             <th @click="sort('name')">Name</th>
             <th @click="sort('asin')">ASIN</th>
-            <th @click="sort('brand')">Brand</th>
+            <th @click="sort('brand_name')">Brand</th>
             <th>Image</th>
           </tr>
         </thead>
@@ -67,7 +72,7 @@
           <tr v-for="product in sortedProductsList" :key="product.id">
             <td>{{ product.name }}</td>
             <td>{{ product.asin }}</td>
-            <td>{{ product.brand }}</td>
+            <td>{{ product.brand_name }}</td>
             <td><img :src="product.image" alt="Product Image" class="product-image" /></td>
           </tr>
         </tbody>

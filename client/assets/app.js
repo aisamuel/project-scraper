@@ -40,20 +40,18 @@ const app = Vue.createApp({
       }
     },
 
-    async fetchProducts(page = 1) {
-      console.log(`fetchProducts() called with page: ${page}`);
-      console.log(`Selected Brand: ${this.selectedBrand}`);
+    async fetchProducts(page = 1, allBrands = false) {
+      console.log(`fetchProducts() called with page: ${page}, Brand: ${this.selectedBrand}`);
     
-      if (!this.selectedBrand) {
-        console.warn("fetchProducts() was called but no brand is selected.");
-        return;
+      // ✅ Adjust API URL based on whether "ALL" is selected
+      let apiUrl = `${this.baseUrl}${this.productUrl}?page=${page}&page_size=${this.pageSize}&search=${this.searchQuery}`;
+    
+      if (!allBrands) {
+        apiUrl += `&brand__name=${encodeURIComponent(this.selectedBrand)}`;
       }
     
       try {
-        const res = await fetch(
-          `${this.baseUrl}${this.productUrl}?brand__name=${encodeURIComponent(this.selectedBrand)}&page=${page}&page_size=${this.pageSize}&search=${this.searchQuery}`,
-          { mode: "cors" }
-        );
+        const res = await fetch(apiUrl, { mode: "cors" });
     
         if (res.ok) {
           const result = await res.json();
@@ -67,6 +65,7 @@ const app = Vue.createApp({
         console.error("Error fetching products:", error);
       }
     },
+    
 
 
     updateBrand(event) {
@@ -76,7 +75,11 @@ const app = Vue.createApp({
   
       this.$nextTick(() => {
         console.log(`Updated selectedBrand: ${this.selectedBrand}, calling fetchProducts...`);
-        this.fetchProducts(1);
+        if (this.selectedBrand === "ALL") {
+          this.fetchProducts(1, allBrands=true);
+        } else {
+          this.fetchProducts(1);
+        }
       });
     },
 
