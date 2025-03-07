@@ -1,15 +1,16 @@
-import time
-import logging
-import random
-import requests
 import os
+import time
+import random
+import logging
+
+import requests
 from bs4 import BeautifulSoup
 from celery import shared_task
-from celery.utils.log import get_task_logger
 from fake_useragent import UserAgent
-from .models import Product, Brand
 from django.core.cache import cache
 from django.db.utils import IntegrityError
+
+from .models import Product, Brand
 
 # Initialize logger for Celery tasks
 logger = logging.getLogger('scraper')  
