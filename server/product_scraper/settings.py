@@ -25,7 +25,13 @@ SECRET_KEY = os.getenv('SECRET_KEY', '')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv('DEBUG', False)
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ["127.0.0.1", "localhost"]
+
+# Allow WebSockets in CSRF_TRUSTED_ORIGINS
+CSRF_TRUSTED_ORIGINS = [
+    "http://localhost:8020/",  # Vue frontend
+    "http://127.0.0.1:8000",  # Django backend
+]
 
 
 # Application definition
@@ -115,7 +121,12 @@ REST_FRAMEWORK = {
     ],
 }
 
-CORS_ORIGIN_ALLOW_ALL = True
+# Default CORS Allowed Origins (if not set in .env)
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:8020",
+    "http://localhost",
+    ]
+
 CORS_ALLOW_CREDENTIALS = True
 
 # Internationalization
