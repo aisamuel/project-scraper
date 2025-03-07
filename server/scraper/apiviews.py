@@ -8,6 +8,10 @@ from .pagination import CustomPageNumberPagination
 class BrandListView(generics.ListAPIView):
     queryset = Brand.objects.all()
     serializer_class = BrandSerializer
+
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter]
+    filterset_fields = ['name']  
+    search_fields = ['name',]
     
 
 class ProductListView(generics.ListAPIView):
