@@ -13,7 +13,7 @@ const app = Vue.createApp({
       currentSortDir: "asc",
       productsList: [],
       currentPage: 1,
-      pageSize: 5,
+      pageSize: 10,
     };
   },
   methods: {
