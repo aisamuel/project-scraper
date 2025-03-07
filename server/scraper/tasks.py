@@ -15,7 +15,7 @@ from django.db.utils import IntegrityError
 logger = logging.getLogger('scraper')  
 
 # Constants
-CACHE_TIMEOUT = 24 * 3600  # Cache each page result for 24 hours
+CACHE_TIMEOUT = 6 * 3600  # Cache each page result for 6 hours
 CAPTCHA_IDENTIFIER = os.getenv('CAPTCHA_IDENTIFIER', 'captcha')
 PROXY_LIST = []
 

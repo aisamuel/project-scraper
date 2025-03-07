@@ -144,22 +144,26 @@ Here’s a simplified version of the scraping task:
 @shared_task(bind=True, max_retries=3)
 def scrape_amazon_products(self, brand_name):
     # Define the request parameters, user-agent rotation, and proxy settings
-    brand_name = os.getenv('BRAND_NAME', 'iPhone')
-    url = f"https://www.amazon.com/s?k={brand_name}"
-    headers = {"User-Agent": random.choice(USER_AGENTS)}
-    proxies = {"http": random.choice(PROXIES)}
+    brands = Brand.objects.all()
 
-    try:
-        # Send request and parse response
-        response = requests.get(url, headers=headers, proxies=proxies)
-        if "captcha" in response.text.lower():
-            raise Exception("Captcha encountered")
-        
-        # Parse products and store in database
-        # ...
+    for brand in brands:
+        brand_name = brand.name
+        logger.info(f"Starting scraping for brand: {brand_name}")
+        url = f"https://www.amazon.com/s?k={brand_name}"
+        headers = {"User-Agent": random.choice(USER_AGENTS)}
+        proxies = {"http": random.choice(PROXIES)}
 
-    except Exception as e:
-        raise self.retry(exc=e)
+        try:
+            # Send request and parse response
+            response = requests.get(url, headers=headers, proxies=proxies)
+            if "captcha" in response.text.lower():
+                raise Exception("Captcha encountered")
+            
+            # Parse products and store in database
+            # ...
+
+        except Exception as e:
+            raise self.retry(exc=e)
 ```
 
 ### 6. Assumptions and Design Decisions
