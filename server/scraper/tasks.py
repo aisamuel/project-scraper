@@ -51,7 +51,6 @@ def scrape_amazon_products(self):
             logger.info(f"Created a new brand entry for {brand_name}")
 
         while more_pages:
-            print(page)
             cache_key = f"amazon_{brand_name}_page_{page}"
             cached_response = cache.get(cache_key)
 
@@ -62,7 +61,6 @@ def scrape_amazon_products(self):
                 # Make a request to Amazon if cache is empty
                 logger.info(f"Making HTTP request for {brand_name}, page {page}")
                 url = f"{os.getenv('AMAZON_BASE_URL', 'https://www.amazon.com/')}s?k={brand_name}&page={page}"
-                print(url)
                 try:
                     if PROXY_LIST:
                         response = requests.get(url, headers=headers, proxies=proxies, timeout=10)
@@ -129,7 +127,6 @@ def scrape_amazon_products(self):
 
             # Check if a "Next" page link is available
             next_page = soup.select_one("a.s-pagination-next")
-            print(next_page)
             if next_page:
                 page += 1  # Go to the next page
                 logger.info(f"Moving to the next page: {page}")
