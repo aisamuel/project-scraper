@@ -46,7 +46,7 @@ const app = Vue.createApp({
       // ✅ Adjust API URL based on whether "ALL" is selected
       let apiUrl = `${this.baseUrl}${this.productUrl}?page=${page}&page_size=${this.pageSize}&search=${this.searchQuery}`;
     
-      if (!allBrands) {
+      if (!allBrands && this.selectedBrand != 'ALL') {
         apiUrl += `&brand__name=${encodeURIComponent(this.selectedBrand)}`;
       }
     
