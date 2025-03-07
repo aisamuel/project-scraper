@@ -31,6 +31,7 @@ ALLOWED_HOSTS = ["127.0.0.1", "localhost"]
 CSRF_TRUSTED_ORIGINS = [
     "http://localhost:8020/",  # Vue frontend
     "http://127.0.0.1:8000",  # Django backend
+    "https://p01--scrapper--b9s647vhp5zt.code.run"
 ]
 
 
