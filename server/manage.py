@@ -3,7 +3,7 @@
 import os
 import sys
 
-import dotenv # type: ignore
+import dotenv  # type: ignore
 
 
 def main():

@@ -3,8 +3,8 @@ from typing import Any, Dict
 
 from django.urls import reverse
 from rest_framework import status  # type: ignore
-from rest_framework.test import APITestCase  # type: ignore
 from rest_framework.response import Response  # type: ignore
+from rest_framework.test import APITestCase  # type: ignore
 
 from .models import Brand, Product
 
