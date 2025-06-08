@@ -1,5 +1,5 @@
-from rest_framework import generics, filters
-from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import generics, filters # type: ignore
+from django_filters.rest_framework import DjangoFilterBackend # type: ignore
 from .models import Product, Brand
 from .serializers import ProductSerializer, BrandSerializer
 from .pagination import CustomPageNumberPagination

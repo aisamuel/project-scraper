@@ -1,7 +1,7 @@
 import os
 from django.urls import reverse
-from rest_framework import status
-from rest_framework.test import APITestCase
+from rest_framework import status # type: ignore
+from rest_framework.test import APITestCase # type: ignore
 from .models import Product, Brand
 from .serializers import ProductSerializer
 
