@@ -1,23 +1,23 @@
 import os
+from typing import Any, Dict
 
 from django.urls import reverse
 from rest_framework import status  # type: ignore
 from rest_framework.test import APITestCase  # type: ignore
+from rest_framework.response import Response  # type: ignore
 
 from .models import Brand, Product
-from .serializers import ProductSerializer
 
-BRAND_NAME = os.getenv("BRAND_NAME", "iPhone")
+BRAND_NAME: str = os.getenv("BRAND_NAME", "iPhone")
 
 
 class ProductListAPIViewTest(APITestCase):
+    brand: Brand
 
     @classmethod
-    def setUpTestData(cls):
-        # Create a brand
+    def setUpTestData(cls) -> None:
         cls.brand = Brand.objects.create(name=BRAND_NAME)
 
-        # Create 15 products for testing pagination
         for i in range(15):
             Product.objects.create(
                 name=f"iPhone Product {i+1}",
@@ -27,93 +27,84 @@ class ProductListAPIViewTest(APITestCase):
                 brand=cls.brand,
             )
 
-    def test_pagination(self):
-        url = reverse("product_list")
+    def test_pagination(self) -> None:
+        url: str = reverse("product_list")
+        response: Response = self.client.get(url, {"page": 1})
 
-        # Request the first page
-        response = self.client.get(url, {"page": 1})
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(len(response.data["results"]), 10)  # Check page size
+        self.assertEqual(len(response.data["results"]), 10)
         self.assertIn("next", response.data)
         self.assertIn("previous", response.data)
 
-        # Request the second page
         response = self.client.get(url, {"page": 2})
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(
-            len(response.data["results"]), 5
-        )  # Remaining items on the second page
+        self.assertEqual(len(response.data["results"]), 5)
 
-    def test_filter_by_brand(self):
-        url = reverse("product_list")
+    def test_filter_by_brand(self) -> None:
+        url: str = reverse("product_list")
+        response: Response = self.client.get(url, {"brand__name": BRAND_NAME})
 
-        # Filter by brand name
-        response = self.client.get(url, {"brand__name": BRAND_NAME})
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(len(response.data["results"]), 10)  # Page size
+        self.assertEqual(len(response.data["results"]), 10)
         self.assertEqual(response.data["results"][0]["brand_name"], self.brand.name)
 
-    def test_search_by_name(self):
-        url = reverse("product_list")
+    def test_search_by_name(self) -> None:
+        url: str = reverse("product_list")
+        response: Response = self.client.get(url, {"search": "Product 1"})
 
-        # Search by name containing "Product 1"
-        response = self.client.get(url, {"search": "Product 1"})
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-
-        # Check that the search returned relevant results
         for item in response.data["results"]:
             self.assertIn("Product 1", item["name"])
 
-    def test_search_by_asin(self):
-        url = reverse("product_list")
+    def test_search_by_asin(self) -> None:
+        url: str = reverse("product_list")
+        response: Response = self.client.get(url, {"search": "ASIN008"})
 
-        # Search by ASIN
-        response = self.client.get(url, {"search": "ASIN008"})
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-
-        # Check that the result has the specific ASIN
         self.assertEqual(response.data["results"][0]["asin"], "ASIN008")
 
 
 class BrandListViewTest(APITestCase):
-    def setUp(self):
-        self.url = reverse("brand-list")
+    url: str
+    brand1: Brand
+    brand2: Brand
+    brand3: Brand
 
-        # Create sample brands
+    def setUp(self) -> None:
+        self.url = reverse("brand-list")
         self.brand1 = Brand.objects.create(name="Apple")
         self.brand2 = Brand.objects.create(name="Samsung")
         self.brand3 = Brand.objects.create(name="Sony")
 
-    def test_list_brands(self):
-        response = self.client.get(self.url)
+    def test_list_brands(self) -> None:
+        response: Response = self.client.get(self.url)
+
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+        data: Dict[str, Any] = response.json()
+        self.assertIn("results", data)
+        self.assertGreaterEqual(len(data["results"]), 3)
 
-        data = response.json()
-        self.assertIn("results", data)  # Ensure paginated response
-        self.assertGreaterEqual(len(data["results"]), 3)  # At least 3 brands
-
-    def test_brand_pagination(self):
-        for i in range(10):  # Add more brands
+    def test_brand_pagination(self) -> None:
+        for i in range(10):
             Brand.objects.create(name=f"Brand {i}")
 
-        response = self.client.get(f"{self.url}?page=1&page_size=5")
+        response: Response = self.client.get(f"{self.url}?page=1&page_size=10")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-
-        data = response.json()
+        data: Dict[str, Any] = response.json()
         self.assertIn("results", data)
-        self.assertEqual(len(data["results"]), 10)  # Should return 10 per page
+        self.assertEqual(len(data["results"]), 10)
 
-    def test_search_brands(self):
-        response = self.client.get(f"{self.url}?search=Sony")
+    def test_search_brands(self) -> None:
+        response: Response = self.client.get(f"{self.url}?search=Sony")
+
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-
-        data = response.json()
-        self.assertEqual(len(data["results"]), 1)  # Should return Sony brand only
+        data: Dict[str, Any] = response.json()
+        self.assertEqual(len(data["results"]), 1)
         self.assertEqual(data["results"][0]["name"], "Sony")
 
-    def test_search_no_results(self):
-        response = self.client.get(f"{self.url}?search=NonExistentBrand")
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
+    def test_search_no_results(self) -> None:
+        response: Response = self.client.get(f"{self.url}?search=NonExistentBrand")
 
-        data = response.json()
-        self.assertEqual(len(data["results"]), 0)  # Should return no results
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        data: Dict[str, Any] = response.json()
+        self.assertEqual(len(data["results"]), 0)
