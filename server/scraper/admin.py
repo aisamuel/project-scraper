@@ -1,17 +1,19 @@
 from django.contrib import admin
-from .models import Product, Brand
+
+from .models import Brand, Product
+
 
 @admin.register(Brand)
 class BrandAdmin(admin.ModelAdmin):
-    list_display = ('id', 'name')
-    search_fields = ('name',)
-    ordering = ('name',)
+    list_display = ("id", "name")
+    search_fields = ("name",)
+    ordering = ("name",)
 
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ('id', 'name', 'asin', 'sku', 'brand', 'image')
-    list_filter = ('brand',)
-    search_fields = ('name', 'asin', 'sku')
-    ordering = ('name',)
-    readonly_fields = ('asin',)
+    list_display = ("id", "name", "asin", "sku", "brand", "image")
+    list_filter = ("brand",)
+    search_fields = ("name", "asin", "sku")
+    ordering = ("name",)
+    readonly_fields = ("asin",)

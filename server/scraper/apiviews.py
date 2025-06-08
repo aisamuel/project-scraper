@@ -1,8 +1,9 @@
-from rest_framework import generics, filters # type: ignore
-from django_filters.rest_framework import DjangoFilterBackend # type: ignore
-from .models import Product, Brand
-from .serializers import ProductSerializer, BrandSerializer
+from django_filters.rest_framework import DjangoFilterBackend  # type: ignore
+from rest_framework import filters, generics  # type: ignore
+
+from .models import Brand, Product
 from .pagination import CustomPageNumberPagination
+from .serializers import BrandSerializer, ProductSerializer
 
 
 class BrandListView(generics.ListAPIView):
@@ -10,9 +11,11 @@ class BrandListView(generics.ListAPIView):
     serializer_class = BrandSerializer
 
     filter_backends = [DjangoFilterBackend, filters.SearchFilter]
-    filterset_fields = ['name']  
-    search_fields = ['name',]
-    
+    filterset_fields = ["name"]
+    search_fields = [
+        "name",
+    ]
+
 
 class ProductListView(generics.ListAPIView):
     queryset = Product.objects.all()
@@ -20,8 +23,8 @@ class ProductListView(generics.ListAPIView):
 
     # Enable filtering and search
     filter_backends = [DjangoFilterBackend, filters.SearchFilter]
-    filterset_fields = ['brand__name']  
-    search_fields = ['name', 'asin']
-    
+    filterset_fields = ["brand__name"]
+    search_fields = ["name", "asin"]
+
     # Custom pagination
     pagination_class = CustomPageNumberPagination

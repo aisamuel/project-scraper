@@ -3,14 +3,15 @@
 import os
 import sys
 
-import dotenv
+import dotenv # type: ignore
+
 
 def main():
 
-    dotenv.read_dotenv(os.path.join(os.getcwd(), '.env'), override=True)
-    
+    dotenv.read_dotenv(os.path.join(os.getcwd(), ".env"), override=True)
+
     """Run administrative tasks."""
-    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'product_scraper.settings')
+    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "product_scraper.settings")
     try:
         from django.core.management import execute_from_command_line
     except ImportError as exc:
@@ -22,5 +23,5 @@ def main():
     execute_from_command_line(sys.argv)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

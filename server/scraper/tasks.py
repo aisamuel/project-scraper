@@ -1,26 +1,30 @@
-import os
-import time
-import random
 import logging
+import os
+import random
+import time
 from typing import List, Optional
 
-import requests # type: ignore
-from bs4 import BeautifulSoup # type: ignore
-from celery import shared_task # type: ignore
-from django.core.cache import cache # type: ignore
-from django.db.utils import IntegrityError # type: ignore
+import requests  # type: ignore
+from bs4 import BeautifulSoup  # type: ignore
+from celery import shared_task  # type: ignore
+from django.core.cache import cache  # type: ignore
+from django.db.utils import IntegrityError  # type: ignore
 
-from .models import Product, Brand
 from utility import get_headers, get_proxies
 
+from .models import Brand, Product
+
 # Initialize logger for Celery tasks
-logger = logging.getLogger('scraper')
+logger = logging.getLogger("scraper")
 
 # Constants
 CACHE_TIMEOUT: int = 6 * 3600  # 6 hours
-CAPTCHA_IDENTIFIER: str = os.getenv('CAPTCHA_IDENTIFIER', 'captcha')
+CAPTCHA_IDENTIFIER: str = os.getenv("CAPTCHA_IDENTIFIER", "captcha")
 
-def fetch_page(url: str, headers: dict, proxies: Optional[dict], cache_key: str) -> Optional[BeautifulSoup]:
+
+def fetch_page(
+    url: str, headers: dict, proxies: Optional[dict], cache_key: str
+) -> Optional[BeautifulSoup]:
     cached_response = cache.get(cache_key)
     if cached_response:
         logger.info(f"Using cached data for {cache_key}")
@@ -41,35 +45,44 @@ def fetch_page(url: str, headers: dict, proxies: Optional[dict], cache_key: str)
         logger.error(f"Request failed: {exc}")
         raise exc
 
+
 def parse_products(soup: BeautifulSoup, brand: Brand) -> None:
-    product_elements = soup.select('.s-main-slot .s-result-item')
+    product_elements = soup.select(".s-main-slot .s-result-item")
     for product in product_elements:
-        title_elem = product.select_one("a.a-link-normal.s-line-clamp-2.s-link-style.a-text-normal h2 span")
-        asin = product.get('data-asin')
-        image_elem = product.select_one('.s-image')
+        title_elem = product.select_one(
+            "a.a-link-normal.s-line-clamp-2.s-link-style.a-text-normal h2 span"
+        )
+        asin = product.get("data-asin")
+        image_elem = product.select_one(".s-image")
 
         if asin and title_elem and image_elem:
             title = title_elem.text.strip()
-            image = image_elem['src']
+            image = image_elem["src"]
             sku = "N/A"
 
             existing: Optional[Product] = Product.objects.filter(asin=asin).first()
             if existing:
                 existing.name = title
                 existing.sku = sku
-                existing.image = image # type: ignore
+                existing.image = image  # type: ignore
                 existing.save()
                 logger.info(f"Updated existing product {title} with ASIN {asin}")
             else:
                 try:
-                    Product.objects.create(name=title, asin=asin, sku=sku, image=image, brand=brand)
+                    Product.objects.create(
+                        name=title, asin=asin, sku=sku, image=image, brand=brand
+                    )
                     logger.info(f"Saved product {title} with ASIN {asin}")
                     time.sleep(random.uniform(1, 3))
                 except IntegrityError:
-                    logger.warning(f"Product with ASIN {asin} already exists, skipping.")
+                    logger.warning(
+                        f"Product with ASIN {asin} already exists, skipping."
+                    )
+
 
 def has_next_page(soup: BeautifulSoup) -> bool:
     return soup.select_one("a.s-pagination-next") is not None
+
 
 @shared_task(bind=True, max_retries=3, default_retry_delay=300)
 def scrape_amazon_products(self) -> None:
