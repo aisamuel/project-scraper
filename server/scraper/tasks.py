@@ -2,7 +2,7 @@ import os
 import time
 import random
 import logging
-from typing import Optional
+from typing import List, Optional
 
 import requests # type: ignore
 from bs4 import BeautifulSoup # type: ignore

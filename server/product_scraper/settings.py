@@ -11,6 +11,8 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 import os
 from pathlib import Path
+from typing import Any
+from celery.schedules import crontab # type: ignore
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -163,6 +165,14 @@ CELERY_TIMEZONE = "UTC"
 CELERY_TASK_TRACK_STARTED = True
 CELERY_TASK_TIME_LIMIT = 30 * 60  # 30 minutes
 
+CELERY_BEAT_SCHEDULE: dict[str, dict[str, Any]] = {
+    'scrape_amazon_products_every_six_hours': {
+        'task': 'scraper.tasks.scrape_amazon_products',
+        # Use this line for actual 6-hour interval
+        # 'schedule': crontab(minute=0, hour='*/6'),
+        'schedule': crontab(minute='*'),  # Every minute for testing
+    },
+}
 
 CACHES = {
     "default": {
